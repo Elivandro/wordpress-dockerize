@@ -1,3 +1,7 @@
 .env
-vendor/
-.vscode/
+/.vscode
+/.github
+/wp-app
+/wp-data
+/wp-plugins
+/wp-themes
