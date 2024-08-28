@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   wp:
     image: wordpress # https://hub.docker.com/_/wordpress/
@@ -8,8 +6,8 @@ services:
     volumes:
       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
       - ./wp-app:/var/www/html # Full wordpress project
-      #- ./wp-plugins/trunk/:/var/www/html/wp-content/plugins/trunk # Plugin development
-      # - ./wp-themes/trunk/:/var/www/html/wp-content/themes/trunk # Theme development
+     # - ./wp-plugins:/var/www/html/wp-content/plugins # Plugin development
+     # - ./wp-themes:/var/www/html/wp-content/themes # Theme development
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_NAME: "${DB_NAME}"
@@ -28,18 +26,19 @@ services:
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_NAME: "${DB_NAME}"
-      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_USER: "${DB_USER}"
       WORDPRESS_DB_PASSWORD: "${DB_ROOT_PASSWORD}"
     depends_on:
       - mysql
       - wp
+    command: sh -c "chown -R www-data:www-data /var/www/html/wp-content"
 
   mysql:
     image: mysql:latest # https://hub.docker.com/_/mysql/ - or mariadb https://hub.docker.com/_/mariadb
     ports:
       - ${IP}:3306:3306 # change ip if required
     command: [
-        '--default_authentication_plugin=mysql_native_password',
+        '--default_authentication_plugin=caching_sha2_password',
         '--character-set-server=utf8mb4',
         '--collation-server=utf8mb4_unicode_ci'
     ]
