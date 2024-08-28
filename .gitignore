@@ -1,6 +1,7 @@
 .env
 /.vscode
 /.github
+/.idea
 /wp-app
 /wp-data
 /wp-plugins
